@@ -1,0 +1,19 @@
+<!-- show_all/templates/quotes/show_all.html -->
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+    <div class="grid-container">
+        <main>    
+            <h2>Junaid Jamshed Quote List</h2>
+            <ul>
+                {% for q in quotes %}
+                    <li>{{q}}</li>
+                {% endfor %}
+            </ul>
+            <h2>Junaid Jamshed Pic List</h2>
+            {% for img in images %}
+                <img src={{img}} alt="Junaid Jamshed Picture">
+            {% endfor %}
+        </main>    
+    </div>
+{% endblock %}

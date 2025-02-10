@@ -1,0 +1,38 @@
+<!-- quotes/templates/quotes/base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junaid Jamshed - Quote of the Day</title>
+    <link rel="stylesheet" href="{% static 'quotes/styles.css' %}">
+
+</head>
+<body>
+
+    <header>
+        <h1>Junaid Jamshed - Quote of the Day</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="{% url 'quote' %}">Quote of the Day</a></li>
+            <li><a href="{% url 'show_all' %}">All Quotes</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        {% block content %}
+        <!-- Content specific to each page will go here -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <hr>
+        <p>Page last generated at {{ current_time }}</p>
+    </footer>
+
+</body>
+</html>
