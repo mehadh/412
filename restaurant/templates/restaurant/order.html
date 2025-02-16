@@ -1,0 +1,47 @@
+<!-- restaurant/templates/order.html -->
+
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+ <div class="grid-container" id="order-page">
+    <h1>Place an Order</h1>     
+
+    <form action="{% url 'confirmation' %}" method="POST">
+        {% csrf_token %}
+
+        <div>
+            <h3>Select your item</h3>
+            <input type="checkbox" name="grilled_plate" value="grilled_plate"> Grilled Plate - $9<br>
+            <input type="checkbox" name="beef_platter" value="beef_platter"> Beef Platter - $11<br>
+            <input type="checkbox" name="seafood_special" value="seafood_special"> Seafood Special - $12<br>
+            <input type="checkbox" name="snack_pack" value="snack_pack"> Snack Pack - $4<br>
+            <input type="checkbox" name="beverage" value="beverage"> Beverage - $2<br><br>
+        </div>
+
+        <div>
+            <h3>Today's special</h3>
+            <input type="checkbox" name="special" value="{{ special }}"> {{ special }}<br><br>
+        </div>
+
+        <div>
+            <h3>Special Instructions</h3>
+            <p>Please share any special instructions:</p>
+            <textarea name="notes" rows="3" cols="60"></textarea>   
+            <br><br> 
+        </div>
+
+        <div>
+            <h3>Customer Information</h3>
+            <p>Name:</p><input name="client_name" required>
+            <p>Phone:</p><input name="contact" required>
+            <p>Email:</p><input name="email_address" required>
+            <br><br>
+        </div>
+        <div>
+            <h3>Place your order!</h3>
+            <input type="submit">
+        </div>        
+        
+    </form>
+ </div>
+{% endblock %}

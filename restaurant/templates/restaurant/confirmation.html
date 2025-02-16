@@ -1,0 +1,35 @@
+<!-- formdata/confirmation.html
+ response conf. -->
+
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+<div class="grid-container">
+    <h1>Thanks For Order</h1><br>
+
+    <h3>we thank you for your patronage, {{client_name}}!</h3>
+
+    <p>you can order ready soon: {{ pickup_time }}</p><br>
+
+    <h3>Order Summary</h3>
+
+    <ul>
+        {% for item in selected_items %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+    <p><strong>its price Price:</strong> ${{ total }}</p>
+
+    {% if notes %}
+    <h3>any instruccion</h3>
+    <p>{{ notes }}</p>
+    {% endif %}
+    
+    <h3>informacion customer</h3>
+    <p><strong>Name:</strong> {{ client_name }}</p>
+    <p><strong>Phone:</strong> {{ contact }}</p>
+    <p><strong>Email:</strong> {{ email_address }}</p>
+ 
+</div>
+{% endblock %}
