@@ -1,0 +1,31 @@
+<!-- mini_fb/templates/mini_fb/base.html 
+template
+ -->
+
+ {% load static %}
+<html>
+    <head>
+        <title>Mini Facebook</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+
+    <header>
+        <h1>Mini Facebook</h1>
+    </header>
+
+    <body>
+        <nav>
+            <ul>
+                <li><a href="{% url 'show_all_profiles' %}">Home</a></li>
+            </ul>
+        </nav>
+
+        {% block content %}
+        {% endblock %}
+
+        <hr>
+        <footer>
+            generate maazs@bu.edu very good page its
+        </footer>
+    </body>
+</html>
