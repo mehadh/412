@@ -72,7 +72,7 @@ class CreateProfileView(CreateView):
     def get_success_url(self):
         return reverse('show_profile_self')
 
-class CreateStatusMessageView(LoginRequiredMixin, CreateView):
+class CreateStatusMessageView(CreateView):
     """
     View to let a profile post a status message
     """
