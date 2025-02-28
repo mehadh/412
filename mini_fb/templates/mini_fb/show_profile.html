@@ -7,13 +7,30 @@
         <h2>{{ profile.firstname }} {{ profile.lastname }}</h2>
         <img src="{{ profile.image_url }}" alt="Profile Image" width="200">
     </div>
+    
     <div class="profile-info">
         <ul>
             <li><strong>Name:</strong> {{ profile.firstname }} {{ profile.lastname }}</li>
             <li><strong>City:</strong> {{ profile.city }}</li>
             <li><strong>Email:</strong> {{ profile.email }}</li>
         </ul>
-        <p><button><a href="{% url 'show_all_profiles' %}">Back to All Profilessss</a></button></p>
+        <p><button><a href="{% url 'show_all_profiles' %}">Back to All Profiles</a></button></p>
     </div>
+
+    <div class="status-messages">
+        <h3>Status Messages</h3>
+        {% if profile.get_status_messages %}
+            <ul>
+                {% for status in profile.get_status_messages %}
+                    <li>
+                        <strong>{{ status.timestamp|date:"F j, Y, g:i a" }}</strong>: {{ status.message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No status messages yet.</p>
+        {% endif %}
+    </div>
+
 </div>
 {% endblock %}

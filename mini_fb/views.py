@@ -71,3 +71,34 @@ class CreateProfileView(CreateView):
 
     def get_success_url(self):
         return reverse('show_profile_self')
+
+class CreateStatusMessageView(LoginRequiredMixin, CreateView):
+    """
+    View to let a profile post a status message
+    """
+    form_class = CreateStatusMessageForm
+    template_name = 'mini_fb/create_status_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = Profile.objects.get(pk=self.kwargs['pk'])  # Fetch profile by pk from URL
+        context['profile'] = profile
+        return context
+
+    def form_valid(self, form):
+        profile = Profile.objects.get(pk=self.kwargs['pk'])  # Fetch profile by pk from URL
+        form.instance.profile = profile  # Attach profile to status message
+        sm = form.save()
+
+        # Handle image uploads
+        files = self.request.FILES.getlist('files')
+        for f in files:
+            image = Image()
+            image.image_file = f
+            image.status_message = sm
+            image.save()
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('show_profile', kwargs={'pk': self.kwargs['pk']})  # Redirect to profile
