@@ -37,7 +37,7 @@ class ShowProfileSelfView(LoginRequiredMixin, DetailView):
             return redirect('create_profile')
 class CreateProfileView(CreateView):
     """
-    user creation meth bc admin anoy
+    user creation emth
     """
     model = Profile
     form_class = CreateProfileForm
@@ -71,34 +71,132 @@ class CreateProfileView(CreateView):
 
     def get_success_url(self):
         return reverse('show_profile_self')
-
-class CreateStatusMessageView(CreateView):
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
     """
-    View to let a profile post a status message
+    updation
+    """
+    model = Profile
+    form_class = UpdateProfileForm
+    template_name = 'mini_fb/update_profile_form.html'
+    def get_object(self):
+        try:
+            profile = Profile.objects.get(user=self.request.user)
+            return profile
+        except Profile.DoesNotExist:
+            return redirect('create_profile')
+
+    def get_success_url(self):
+        return reverse('show_profile_self')
+
+class CreateStatusMessageView(LoginRequiredMixin, CreateView):
+    """
+    let profile post it the update
     """
     form_class = CreateStatusMessageForm
     template_name = 'mini_fb/create_status_form.html'
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        profile = Profile.objects.get(pk=self.kwargs['pk'])  # Fetch profile by pk from URL
+        profile = Profile.objects.get(user=self.request.user)
         context['profile'] = profile
         return context
 
     def form_valid(self, form):
-        profile = Profile.objects.get(pk=self.kwargs['pk'])  # Fetch profile by pk from URL
-        form.instance.profile = profile  # Attach profile to status message
+        profile = Profile.objects.get(user=self.request.user)
+        form.instance.profile = profile
         sm = form.save()
-
-        # Handle image uploads
         files = self.request.FILES.getlist('files')
         for f in files:
             image = Image()
             image.image_file = f
             image.status_message = sm
             image.save()
-
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('show_profile', kwargs={'pk': self.kwargs['pk']})  # Redirect to profile
+        return reverse('show_profile_self')
+
+class DeleteStatusMessageView(LoginRequiredMixin, DeleteView):
+    """
+    deletes tuats message
+    """
+    model = StatusMessage
+    template_name = 'mini_fb/delete_status_form.html'
+    context_object_name = 'status_message'
+    
+
+    def dispatch(self, request, *args, **kwargs):
+        status_message = self.get_object()
+        profile = Profile.objects.get(user=request.user)
+        if status_message.profile != profile:
+            return redirect('show_profile_self')
+        return super(DeleteStatusMessageView, self).dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('show_profile_self')
+
+class UpdateStatusMessageView(LoginRequiredMixin, UpdateView):
+    """
+    updaet it
+    """
+    model = StatusMessage
+    form_class = UpdateStatusMessageForm
+    template_name = 'mini_fb/update_status_form.html'
+    context_object_name = 'status_message'
+    
+
+    def dispatch(self, request, *args, **kwargs):
+        status_message = self.get_object()
+        profile = Profile.objects.get(user=request.user)
+        if status_message.profile != profile:
+            return redirect('show_profile_self')
+        return super(UpdateStatusMessageView, self).dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('show_profile_self')
+
+class CreateFriendView(LoginRequiredMixin, View):
+    """
+    bruh its self explantaotry
+    """
+    def dispatch(self, request, *args, **kwargs):
+        other_pk = kwargs.get('other_pk')
+        try:
+            profile = Profile.objects.get(user=request.user)
+            other_profile = Profile.objects.get(pk=other_pk)
+        except Profile.DoesNotExist:
+            return redirect('show_all_profiles')
+
+        profile.add_friend(other_profile)
+        return redirect('show_profile_self')
+
+class ShowFriendSuggestionsView(LoginRequiredMixin, DetailView):
+    """
+    friend sugestion viewier
+    """
+    model = Profile
+    template_name = 'mini_fb/friend_suggestions.html'
+    context_object_name = 'profile'
+    def get_object(self):
+        profile = Profile.objects.get(user=self.request.user)
+        return profile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['suggestions'] = self.object.get_friend_suggestions()
+        return context
+
+class ShowNewsFeedView(LoginRequiredMixin, DetailView):
+    """
+    feed liek fb feed
+    """
+    model = Profile
+    template_name = 'mini_fb/news_feed.html'
+    context_object_name = 'profile'
+    def get_object(self):
+        profile = Profile.objects.get(user=self.request.user)
+        return profile
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['news_feed'] = self.object.get_news_feed()
+        return context

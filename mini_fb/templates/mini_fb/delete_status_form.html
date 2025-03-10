@@ -1,0 +1,20 @@
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+<div class="fb_page">
+    <h2>delet eit your statius</h2>
+    <p>really are you truly sure really that you will delet it really?</p>
+    <p><strong>{{ status_message.message }}</strong></p>
+
+    <!-- Confirm Delete Form -->
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Confirm Deletion operatoin</button>
+    </form>
+
+    <!-- Cancel Delete Form -->
+    <form method="GET" action="{% url 'show_profile' status_message.profile.pk %}">
+        <button type="submit">Cancel</button>
+    </form>
+</div>
+{% endblock %}
