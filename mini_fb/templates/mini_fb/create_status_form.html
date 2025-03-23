@@ -2,10 +2,9 @@
 
 {% block content %}
 <div class="fb_page">
-    <h2>Post a Status Message for the name that is you a re which si this one {{ profile.firstname }} {{ profile.lastname }}</h2>
+    <h2>Post a Status Message for the name that is you are which si this one {{ profile.firstname }} {{ profile.lastname }}</h2>
 
-    <form method="POST" action="{% url 'create_status' profile.pk %}" enctype="multipart/form-data">
-
+    <form method="POST" action="{% url 'create_status' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <p>

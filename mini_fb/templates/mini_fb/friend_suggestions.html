@@ -1,0 +1,28 @@
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+<div class="fb_page">
+    <h2>Friend suggestion you {{ profile.firstname }} {{ profile.lastname }}</h2>
+
+    <ul>
+        {% for suggestion in suggestions %}
+        <li>
+            <div class="suggestion_profile">
+                <img src="{{ suggestion.image_url }}" alt="Profile Image" width="100">
+                <div class="suggestion_info">
+                    <a href="{% url 'show_profile' suggestion.pk %}">
+                        {{ suggestion.firstname }} {{ suggestion.lastname }}
+                    </a>
+                    - <a href="{% url 'add_friend' suggestion.pk %}">Add Friend  xD</a>
+                </div>
+            </div>
+            <br>
+        </li>
+        {% empty %}
+        <li>No friend suggestions.</li>
+        {% endfor %}
+    </ul>
+
+    <p><button><a href="{% url 'show_profile' profile.pk %}">Back Profile</a></button></p>
+</div>
+{% endblock %}
