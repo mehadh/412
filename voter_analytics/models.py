@@ -27,49 +27,59 @@ class Voter(models.Model):
         return f'{self.first_name} {self.last_name} ({self.street_name}, {self.zip_code})'
     
 def load_data():
-    '''load from csv'''
+    """Load data from newton_voters.csv in the same directory."""
+    import csv
+    from datetime import datetime
+
+    # Clear old data
     Voter.objects.all().delete()
-    import os
-    app_dir = os.path.dirname(os.path.abspath(__file__))
-    filename = os.path.join(app_dir, 'newton_voters.csv')
-    f = open(filename, encoding='utf-8')
-    headers = f.readline()
-    print(f'Headers: {headers}')
-    for line in f:
-        try:
-            fields = line.strip().split(',')
-            if len(fields) < 17:
-                print(f'skip {line}')
+    print("🧹 Deleted existing Voter records.")
+
+    # Path to the CSV next to this file
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    csv_path = os.path.join(current_dir, 'newton_voters.csv')
+
+    with open(csv_path, encoding='utf-8') as f:
+        reader = csv.reader(f)
+        headers = next(reader)
+        print(f"📋 Headers: {headers}")
+
+        for row in reader:
+            if len(row) < 17:
+                print(f"⚠️ Skipping incomplete row: {row}")
                 continue
-            def parse_bool(value):
-                return value.strip().lower() in ('1', 'true', 'yes')
-            def parse_date(value):
-                from datetime import datetime
+
+            def parse_bool(val):
+                return val.strip().lower() in ['1', 'true', 'yes']
+
+            def parse_date(val):
                 try:
-                    return datetime.strptime(value.strip(), '%Y-%m-%d').date()
-                except (ValueError, TypeError):
+                    return datetime.strptime(val.strip(), '%Y-%m-%d').date()
+                except Exception:
                     return None
-            voter = Voter(
-                voter_id_number=fields[0].strip(),
-                last_name=fields[1].strip(),
-                first_name=fields[2].strip(),
-                street_number=fields[3].strip(),
-                street_name=fields[4].strip(),
-                apartment_number=fields[5].strip() if fields[5].strip() else None,
-                zip_code=fields[6].strip(),
-                date_of_birth=parse_date(fields[7]),
-                date_of_registration=parse_date(fields[8]),
-                party_affiliation=fields[9].strip(),
-                precinct_number=fields[10].strip(),
-                v20state=parse_bool(fields[11]),
-                v21town=parse_bool(fields[12]),
-                v21primary=parse_bool(fields[13]),
-                v22general=parse_bool(fields[14]),
-                v23town=parse_bool(fields[15]),
-                voter_score=int(fields[16].strip()),
-            )
-            voter.save()
-            print(f'create {voter}')
-        except Exception as e:
-            print(f"!! {line}")
-            print(f" {e} !! ")
+
+            try:
+                voter = Voter(
+                    voter_id_number=row[0].strip(),
+                    last_name=row[1].strip(),
+                    first_name=row[2].strip(),
+                    street_number=row[3].strip(),
+                    street_name=row[4].strip(),
+                    apartment_number=row[5].strip() if row[5].strip() else None,
+                    zip_code=row[6].strip(),
+                    date_of_birth=parse_date(row[7]),
+                    date_of_registration=parse_date(row[8]),
+                    party_affiliation=row[9].strip(),
+                    precinct_number=row[10].strip(),
+                    v20state=parse_bool(row[11]),
+                    v21town=parse_bool(row[12]),
+                    v21primary=parse_bool(row[13]),
+                    v22general=parse_bool(row[14]),
+                    v23town=parse_bool(row[15]),
+                    voter_score=int(row[16].strip()),
+                )
+                voter.save()
+                print(f"✅ Saved: {voter}")
+            except Exception as e:
+                print(f"❌ Failed to save row: {row}")
+                print(f"   Error: {e}")
