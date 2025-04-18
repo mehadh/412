@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Store Locations</title>
+</head>
+<body>
+    <h1>Store Locations</h1>
+    <ul>
+        {% for store in object_list %}
+            <li>
+                <strong>{{ store.name }}</strong><br>
+                Address: {{ store.address }}<br>
+                Owner: {{ store.owner.username }}
+            </li>
+        {% empty %}
+            <li>No stores found.</li>
+        {% endfor %}
+    </ul>
+    <a href="/transactions/">View Transactions</a>
+</body>
+</html>

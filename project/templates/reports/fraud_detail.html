@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fraud Report Detail</title>
+</head>
+<body>
+    <h1>Fraud Report</h1>
+
+    <p><strong>Transaction:</strong> {{ object.transaction }}</p>
+    <p><strong>Submitted by:</strong> {{ object.reporter.username }}</p>
+    <p><strong>Description:</strong> {{ object.description }}</p>
+    <p><strong>Status:</strong> {{ object.get_status_display }}</p>
+    <p><strong>Date:</strong> {{ object.submitted_at }}</p>
+
+    <a href="/transactions/">Back to Transactions</a>
+</body>
+</html>

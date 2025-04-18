@@ -23,4 +23,5 @@ urlpatterns = [
     path("restaurant/", include("restaurant.urls")),
     path("mini_fb/", include("mini_fb.urls")),  # Corrected syntax here
     path("voter_analytics/", include("voter_analytics.urls")),  # Corrected syntax here
+    path('', include('project.urls')),
 ]
