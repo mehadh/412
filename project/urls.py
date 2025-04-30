@@ -18,11 +18,11 @@ urlpatterns = [
 
 ]
 
-from .views import TransactionCreateAPI
+# from .views import TransactionCreateAPI # IS ONLY OCMENT OUT FOR DEPLOY IS OK YES ? 
 
-urlpatterns += [
-    path('api/transactions/', TransactionCreateAPI.as_view(), name='api-transaction-create'),
-]
+# urlpatterns += [
+#     path('api/transactions/', TransactionCreateAPI.as_view(), name='api-transaction-create'),
+# ]
 
 from .views import TransactionGraphView
 

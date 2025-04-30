@@ -92,24 +92,25 @@ def toggle_transaction_flag(request, pk):
     return redirect('transaction-list')
 
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .serializers import TransactionSerializer
+# I COMMENT OUT ONLY FOR DEPLOY XD BUT ITS ALLOW OK 
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+# from rest_framework import status
+# from .serializers import TransactionSerializer
 
-VALID_API_KEYS = ['1234', 'abcd', 'deadbeef']  # ✅ Add any keys here
+# VALID_API_KEYS = ['1234', 'abcd', 'deadbeef']  # ✅ Add any keys here
 
-class TransactionCreateAPI(APIView):
-    def post(self, request):
-        api_key = request.headers.get('X-API-KEY')
-        if api_key not in VALID_API_KEYS:
-            return Response({'error': 'Invalid or missing API key.'}, status=status.HTTP_403_FORBIDDEN)
+# class TransactionCreateAPI(APIView):
+#     def post(self, request):
+#         api_key = request.headers.get('X-API-KEY')
+#         if api_key not in VALID_API_KEYS:
+#             return Response({'error': 'Invalid or missing API key.'}, status=status.HTTP_403_FORBIDDEN)
 
-        serializer = TransactionSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         serializer = TransactionSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 from django.views.generic import TemplateView
 from django.db.models.functions import TruncDay

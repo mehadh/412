@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     "mini_fb",
     "voter_analytics",
     "project",
-    "rest_framework"
+    #"rest_framework" #not work for my deploy xd 
 ]
 
 MIDDLEWARE = [
